@@ -1,0 +1,973 @@
+<html>
+  <head>
+    <!--<base href="https://supermarche.exemple.com/%20je%20veux%20pouvoir%20trier%20par%20prix,...%20Et%20par%20magasin,%20cat%C3%A9gorie...%20je%20veux%20que%20visuellement%20ce%20sois%20des%20card%20comme%20sur%20instagram.%20Faut%20ce%20sois%20Mobile%20first.%20Je%20veux%20voir%20que%20les%20images%20qui%20s'affiche%20en%20grille.%20Et%20y%20a%20un%20contour%20de%20couleur%20qui%20indique%20quel%20magasin.%20Et%20par%20dessus%20l'image%20il%20y%20a%20mis%20le%20prix.%20Il%20y%20a%20aussi%20possibilit%C3%A9%20de%20rechercher%20un%20produit%20afin%20de%20l'ajouter%20plus%20facilement%20a%20sa%20liste%20de%20course.%20Une%20fois%20tout%20les%20produit%20ajouter%20dans%20sa%20liste%20de%20course,%20on%20sais%20la%20t%C3%A9l%C3%A9charger%20en%20pdf%20et%20dessus%20il%20est%20indiqu%C3%A9%20le%20magasin,%20la%20cat%C3%A9gorie,%20prix,...%20Je%20veux%20aussi%20pouvoir%20ajout%C3%A9%20des%20produits.%20Et%20pouvoir%20exporter%20la%20liste%20des%20produits%20que%20je%20vien%20d'ajouter%20afin%20de%20pouvoir%20les%20ajout%C3%A9%20en%20dur%20dans%20le%20code.%20Je%20veux%20pouvoir%20enlever%20des%20produits%20de%20ma%20liste%20de%20course%20si%20je%20me%20suis%20tromper.%20Et%20je%20doit%20aussi%20pouvoir%20mettre%20la%20quantit%C3%A9%20que%20je%20veux%20acheter%20de%20produits.%20Faut%20aussi%20que%20dans%20la%20liste%20des%20courses%20%C3%A7a%20donne%20le%20prix%20global%20des%20courses,%20dans%20quel%20magasin%20aller.%20Je%20veux%20%C3%A9galement%20que%20les%20produits%20ont%20une%20date%20de%20derni%C3%A8re%20modification%20o%C3%B9%20j'indique%20quand%20j'ai%20mis%20a%20jour%20le%20prix%20du%20produit.%20Je%20veux%20%C3%A9galement%20un%20bouton%20qui%20me%20permet%20de%20voir%20tout%20les%20produits%20dont%20la%20date%20a%20d%C3%A9passer%201%20mois%20afin%20que%20cela%20m'invite%20%C3%A0%20v%C3%A9rifier%20le%20prix%20car%20il%20a%20possiblement%20changer.%20Je%20veux%20que%20les%20produits%20a%20v%C3%A9rifier,%20il%20m'indique%20que%20ceux%20de%20plus%20de%201%20mois%20qu'il%20faut%20v%C3%A9rifier%20en%20m'indiquant%20%C3%A9galement%20le%20magasin.%20Je%20peu%20aussi%20en%20sortir%20un%20PDF.%20Je%20veux%20%C3%A9galement%20que%20le%20site%20en%20version%20Web%20s'adapte%20%C3%A0%20l'%C3%A9cran.%20Am%C3%A9liore%20tout%20%C3%A7a%20pour%20que%20ce%20sois%20un%20site%20qui%20r%C3%A9pond%20aux%20exigence%20et%20au%20modernisme%20des%20sites%20en%202024.%20Je%20veux%20le%20graphique%20s'affiche%20toujour,%20parcontre%20trouve%20une%20astuce%20car%20les%20titres%20de%20mes%20produits%20sont%20long,%20donc%20%C3%A7a%20rend%20le%20graphique%20moche.%20Pourquoi%20pas,%20pouvoir%20r%C3%A9duire%20la%20liste%20dans%20le%20graphique%20ou%20alors,%20ne%20prendre%20que%20les%20produits%20dans%20la%20liste%20de%20course%20et%20les%20afficher%20dans%20le%20graphique.%20Je%20veux%20la%20version%20mobile%20du%20site%20sois%20ultra%20simple%20mais%20qu'on%20ai%20les%20m%C3%AAme%20fonction%20que%20la%20version%20web,%20juste,%20elles%20s'affiches%20pas%20toutes%20au%20lancement%20de%20la%20page.%20Faut%20que%20ce%20sois%20mobile%20first%20mais%20que%20la%20version%20web%20s'adapte%20%C3%A0%20l'%C3%A9cran%20de%20l'utilisateur">-->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Comparateur de prix</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      :root {
+        --bg-color: #f8f9fa;
+        --text-color: #212529;
+        --card-bg: #ffffff;
+        --accent-color: #007bff;
+        --border-color: #dee2e6;
+        --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-color: #121212;
+          --text-color: #ffffff;
+          --card-bg: #1e1e1e;
+          --accent-color: #bb86fc;
+          --border-color: #2c2c2c;
+        }
+      }
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+        transition: background-color 0.3s ease;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        padding-bottom: 80px;
+      }
+      .header {
+        position: sticky;
+        top: 0;
+        background-color: var(--bg-color);
+        padding: 20px 0;
+        z-index: 1000;
+        box-shadow: var(--shadow);
+      }
+      .search-bar {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
+        border-radius: 25px;
+        font-size: 16px;
+        transition: all 0.3s ease;
+      }
+      .search-bar:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--accent-color);
+      }
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .filter-btn {
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .filter-btn:hover,
+      .filter-btn.active {
+        background-color: var(--accent-color);
+        color: var(--bg-color);
+      }
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+      }
+      .product-card {
+        position: relative;
+        background-color: var(--card-bg);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease;
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+      .product-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+      }
+      .product-info {
+        padding: 15px;
+      }
+      .product-price {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: var(--accent-color);
+        color: var(--bg-color);
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-weight: bold;
+      }
+      .product-store {
+        font-size: 14px;
+        color: var(--accent-color);
+      }
+      .product-name {
+        margin: 10px 0;
+        font-weight: bold;
+        font-size: 14px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .product-last-updated {
+        font-size: 12px;
+        color: #6c757d;
+      }
+      .nav-bar {
+        background-color: var(--card-bg);
+        padding: 15px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-around;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .nav-item {
+        color: var(--text-color);
+        text-decoration: none;
+        font-size: 24px;
+        transition: color 0.3s ease;
+      }
+      .nav-item:hover {
+        color: var(--accent-color);
+      }
+      #add-product-form,
+      #shopping-list,
+      #outdated-products {
+        background-color: var(--card-bg);
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+        box-shadow: var(--shadow);
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid var(--border-color);
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        font-size: 16px;
+      }
+      button {
+        background-color: var(--accent-color);
+        color: var(--bg-color);
+        border: none;
+        padding: 12px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      .shopping-list-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        background-color: var(--bg-color);
+        border-radius: 5px;
+      }
+      .quantity-control {
+        display: flex;
+        align-items: center;
+      }
+      .quantity-btn {
+        background-color: var(--accent-color);
+        color: var(--bg-color);
+        border: none;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .quantity {
+        margin: 0 10px;
+        font-weight: bold;
+      }
+      .shopping-summary {
+        margin-top: 20px;
+        padding: 15px;
+        background-color: var(--card-bg);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+      }
+      #chart-container {
+        margin-top: 45px;
+        background-color: var(--card-bg);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+      }
+      @media (min-width: 768px) {
+        .product-grid {
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+        .product-image {
+          height: 200px;
+        }
+        .product-name {
+          font-size: 16px;
+        }
+      }
+      @media (min-width: 1024px) {
+        .container {
+          display: grid;
+          grid-template-columns: 3fr 1fr;
+          gap: 30px;
+        }
+        .product-section {
+          grid-column: 1;
+        }
+        .sidebar {
+          grid-column: 2;
+          position: sticky;
+          top: 100px;
+        }
+      }
+      .mobile-menu {
+        display: none;
+      }
+      @media (max-width: 767px) {
+        .mobile-menu {
+          display: block;
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background-color: var(--accent-color);
+          color: var(--bg-color);
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 24px;
+          box-shadow: var(--shadow);
+          z-index: 1000;
+        }
+        .mobile-menu-content {
+          display: none;
+          position: fixed;
+          bottom: 90px;
+          right: 20px;
+          background-color: var(--card-bg);
+          border-radius: 10px;
+          padding: 10px;
+          box-shadow: var(--shadow);
+        }
+        .mobile-menu-content.active {
+          display: block;
+        }
+        .mobile-menu-item {
+          display: block;
+          padding: 10px;
+          color: var(--text-color);
+          text-decoration: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="product-section">
+        <header class="header">
+          <h1>Comparateur de prix</h1>
+          <input
+            type="text"
+            class="search-bar"
+            placeholder="Rechercher un produit..."
+            onkeyup="searchProducts(this.value)"
+          />
+          <div class="filters">
+            <button class="filter-btn active" onclick="filterProducts('all')">
+              Tous
+            </button>
+            <button class="filter-btn" onclick="filterProducts('price')">
+              Prix
+            </button>
+            <button class="filter-btn" onclick="filterProducts('store')">
+              Magasin
+            </button>
+            <button class="filter-btn" onclick="filterProducts('category')">
+              Catégorie
+            </button>
+            <button class="filter-btn" onclick="showOutdatedProducts()">
+              Produits à vérifier
+            </button>
+          </div>
+        </header>
+
+        <div class="product-grid" id="product-grid"></div>
+
+        <div id="outdated-products" style="display: none">
+          <h2>Produits à vérifier (plus d'un mois)</h2>
+          <ul id="outdated-products-list"></ul>
+          <button onclick="generateOutdatedPDF()">
+            Télécharger PDF des produits à vérifier
+          </button>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div id="shopping-list" style="    position: sticky;
+        top: 65px;"">
+          <h2>Liste de courses</h2>
+          <ul id="shopping-list-items"></ul>
+          <div class="shopping-summary" id="shopping-summary"></div>
+          <button onclick="generatePDF()">Télécharger PDF</button>
+        </div>
+
+        <div id="add-product-form" style="display: none">
+          <h2>Ajouter un produit</h2>
+          <div class="form-group">
+            <label for="product-name">Nom du produit</label>
+            <input type="text" id="product-name" required />
+          </div>
+          <div class="form-group">
+            <label for="product-price">Prix</label>
+            <input type="number" id="product-price" step="0.01" required />
+          </div>
+          <div class="form-group">
+            <label for="product-image">URL de l'image</label>
+            <input type="url" id="product-image" required />
+          </div>
+          <div class="form-group">
+            <label for="product-store">Magasin</label>
+            <input type="text" id="product-store" required />
+          </div>
+          <div class="form-group">
+            <label for="product-category">Catégorie</label>
+            <input type="text" id="product-category" required />
+          </div>
+          <button onclick="addProduct()">Ajouter le produit</button>
+          <button onclick="exportNewProducts()">
+            Exporter les nouveaux produits
+          </button>
+        </div>
+
+        <div id="chart-container">
+          <canvas id="priceChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="mobile-menu" onclick="toggleMobileMenu()">☰</div>
+    <div class="mobile-menu-content">
+      <a href="#" class="mobile-menu-item" onclick="showShoppingList()"
+        >Liste de courses</a
+      >
+      <a href="#" class="mobile-menu-item" onclick="showAddProductForm()"
+        >Ajouter un produit</a
+      >
+      <a href="#" class="mobile-menu-item" onclick="showOutdatedProducts()"
+        >Produits à vérifier</a
+      >
+      <a href="#" class="mobile-menu-item" onclick="showStats()"
+        >Statistiques</a
+      >
+    </div>
+
+    <script>
+      let products = [
+        {
+          name: "Pain gris en tranches 800g EVERYDAY",
+          price: 0.99,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/52/56/asset-3305256.jpg",
+          store: "Colruyt",
+          category: "Boulangerie",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Pain blanc tranches 800g EVERYDAY",
+          price: 0.99,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/19/72/asset-1871972.jpg",
+          store: "Colruyt",
+          category: "Boulangerie",
+          lastUpdated: new Date("2024-03-22"),
+        },
+        {
+          name: "Sandwiches au beurre 10pc EVERYDAY",
+          price: 1.19,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/11/61/asset-3361161.jpg",
+          store: "Colruyt",
+          category: "Boulangerie",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Lasagne bolognaise 1kg EVERYDAY",
+          price: 2.79,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/10/44/asset-3411044.jpg",
+          store: "Colruyt",
+          category: "Plat préparé",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Pâte à tartiner noisettes 750g EVERYDAY",
+          price: 1.99,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/13/82/asset-3421382.jpg",
+          store: "Colruyt",
+          category: "Plat préparé",
+          lastUpdated: new Date("2024-03-22"),
+        },
+        {
+          name: "Sauce bolognaise 990g EVERYDAY",
+          price: 2.06,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/62/35/asset-3346235.jpg",
+          store: "Colruyt",
+          category: "Sauce",
+          lastUpdated: new Date("2024-03-22"),
+        },
+        {
+          name: "Fil. poulet sauce poivre gratin 450g BONI",
+          price: 5.99,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/59/94/asset-3255994.jpg",
+          store: "Colruyt",
+          category: "Plat préparé",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Pommes Duchesse 1kg BONI",
+          price: 1.65,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/07/53/asset-3330753.jpg",
+          store: "Colruyt",
+          category: "Surgelé",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Carbonades boeuf bocal 800g EVERYDAY",
+          price: 5.85,
+          image:
+            "https://static.colruytgroup.com/images/500x500/fra/77/33/asset-3267733.jpg",
+          store: "Colruyt",
+          category: "Sauce",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Sauce chaude poivre 200g DEVOS LEMMENS",
+          price: 2.65,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/04/16/asset-3380416.jpg",
+          store: "Colruyt",
+          category: "Sauce",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Spirelli 500g BONI",
+          price: 0.85,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/08/44/asset-2790844.jpg",
+          store: "Colruyt",
+          category: "Spaghetti",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Pâtes Grecques 500g BONI",
+          price: 1.35,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/48/69/asset-2494869.jpg",
+          store: "Colruyt",
+          category: "Spaghetti",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Leo chocolat lait 12x33g MILKA",
+          price: 3.81,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/84/55/asset-1198455.jpg",
+          store: "Colruyt",
+          category: "Biscuit",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Gaufres de Liège 10x55g EVERYDAY",
+          price: 1.29,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/07/03/asset-2080703.jpg",
+          store: "Colruyt",
+          category: "Biscuit",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Madeleine 16x25g LOTUS",
+          price: 2.55,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/60/00/asset-2216000.jpg",
+          store: "Colruyt",
+          category: "Biscuit",
+          lastUpdated: new Date("2024-07-23"),
+        },
+        {
+          name: "Brownies mini 9x30g BONI",
+          price: 1.78,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/91/58/asset-2549158.jpg",
+          store: "Colruyt",
+          category: "Biscuit",
+          lastUpdated: new Date("2024-05-30"),
+        },
+        {
+          name: "Riz cuisson rapide 8x125g BOSTO",
+          price: 3.19,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/90/06/asset-1479006.jpg",
+          store: "Colruyt",
+          category: "Biscuit",
+          lastUpdated: new Date("2024-05-30"),
+        },
+        {
+          name: "Cornets glace vanille 8x120ml EVERYDAY",
+          price: 1.49,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/90/04/asset-2199004.jpg",
+          store: "Colruyt",
+          category: "Dessert",
+          lastUpdated: new Date("2024-05-30"),
+        },
+        {
+          name: "Pizza prosciutto 2x330g",
+          price: 3.79,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/34/27/asset-3463427.jpg",
+          store: "Colruyt",
+          category: "Pizza",
+          lastUpdated: new Date("2024-05-30"),
+        },
+        {
+          name: "Pizza speciale 2x330g",
+          price: 3.75,
+          image:
+            "https://static.colruytgroup.com/images/500x500/std.lang.all/58/73/asset-2985873.jpg",
+          store: "Colruyt",
+          category: "Pizza",
+          lastUpdated: new Date("2024-05-30"),
+        },
+      ];
+
+      let newProducts = [];
+      let shoppingList = [];
+
+      const storeColors = {
+        Lidl: "#FF9999",
+        Aldi: "#99FF99",
+        Colruyt: "#9999FF",
+        Intermarché: "#FFFF99",
+        "Carrefour Express": "##007E2F",
+      };
+
+      function showProducts() {
+        const grid = document.getElementById("product-grid");
+        grid.innerHTML = "";
+        products.forEach((product) => {
+          const card = document.createElement("div");
+          card.className = "product-card";
+          card.style.borderTop = `5px solid ${
+            storeColors[product.store] || "#FFFFFF"
+          }`;
+          card.innerHTML = `
+          <img src="${product.image}" alt="${
+            product.name
+          }" class="product-image">
+          <div style="background-color: ${storeColors[product.store] || "#FFFFFF"}" class="product-price">${product.price.toFixed(2)} €</div>
+          <div class="product-info">
+            <div style="color: ${storeColors[product.store] || "#FFFFFF"}" class="product-store">${product.store}</div>
+            <div class="product-name" title="${product.name}">${
+            product.name
+          }</div>
+            <div class="product-last-updated">Mis à jour le ${product.lastUpdated.toLocaleDateString()}</div>
+          </div>
+        `;
+          card.addEventListener("click", () => addToList(product));
+          grid.appendChild(card);
+        });
+        document.getElementById("add-product-form").style.display = "none";
+        document.getElementById("outdated-products").style.display = "none";
+        document.getElementById("product-grid").style.display = "grid";
+      }
+
+      function filterProducts(criteria) {
+        const buttons = document.querySelectorAll(".filter-btn");
+        buttons.forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        switch (criteria) {
+          case "price":
+            products.sort((a, b) => a.price - b.price);
+            break;
+          case "store":
+            products.sort((a, b) => a.store.localeCompare(b.store));
+            break;
+          case "category":
+            products.sort((a, b) => a.category.localeCompare(b.category));
+            break;
+          default:
+            // 'all' - no sorting needed
+            break;
+        }
+        showProducts();
+      }
+
+      function searchProducts(query) {
+        const filteredProducts = products.filter(
+          (product) =>
+            product.name.toLowerCase().includes(query.toLowerCase()) ||
+            product.store.toLowerCase().includes(query.toLowerCase()) ||
+            product.category.toLowerCase().includes(query.toLowerCase())
+        );
+        const grid = document.getElementById("product-grid");
+        grid.innerHTML = "";
+        filteredProducts.forEach((product) => {
+          const card = document.createElement("div");
+          card.className = "product-card";
+          card.style.borderTop = `5px solid ${
+            storeColors[product.store] || "#FFFFFF"
+          }`;
+          card.innerHTML = `
+          <img src="${product.image}" alt="${
+            product.name
+          }" class="product-image">
+          <div class="product-price">${product.price.toFixed(2)} €</div>
+          <div class="product-info">
+            <div class="product-store">${product.store}</div>
+            <div class="product-name" title="${product.name}">${
+            product.name
+          }</div>
+            <div class="product-last-updated">Mis à jour le ${product.lastUpdated.toLocaleDateString()}</div>
+          </div>
+        `;
+          card.addEventListener("click", () => addToList(product));
+          grid.appendChild(card);
+        });
+      }
+
+      function addToList(product) {
+        const existingItem = shoppingList.find(
+          (item) => item.product.name === product.name
+        );
+        if (existingItem) {
+          existingItem.quantity++;
+        } else {
+          shoppingList.push({ product, quantity: 1 });
+        }
+        updateShoppingList();
+        updatePriceChart();
+        /*alert(`${product.name} ajouté à la liste de courses!`);*/
+      }
+
+      function updateShoppingList() {
+        const list = document.getElementById("shopping-list-items");
+        list.innerHTML = "";
+        shoppingList.forEach((item, index) => {
+          const li = document.createElement("li");
+          li.className = "shopping-list-item";
+          li.innerHTML = `
+          <span>${item.product.name} - ${item.product.price.toFixed(2)} € (${
+            item.product.store
+          }, ${item.product.category})</span>
+          <div class="quantity-control">
+            <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">-</button>
+            <span class="quantity">${item.quantity}</span>
+            <button class="quantity-btn" onclick="changeQuantity(${index}, 1)">+</button>
+          </div>
+        `;
+          list.appendChild(li);
+        });
+        updateShoppingSummary();
+      }
+
+      function changeQuantity(index, change) {
+        shoppingList[index].quantity += change;
+        if (shoppingList[index].quantity <= 0) {
+          shoppingList.splice(index, 1);
+        }
+        updateShoppingList();
+        updatePriceChart();
+      }
+
+      function updateShoppingSummary() {
+        const summary = document.getElementById("shopping-summary");
+        let totalPrice = 0;
+        const stores = new Set();
+
+        shoppingList.forEach((item) => {
+          totalPrice += item.product.price * item.quantity;
+          stores.add(item.product.store);
+        });
+
+        summary.innerHTML = `
+        <h3>Résumé des courses</h3>
+        <p>Prix total: ${totalPrice.toFixed(2)} €</p>
+        <p>Magasins à visiter: ${Array.from(stores).join(", ")}</p>
+      `;
+      }
+
+      function showShoppingList() {
+        document.getElementById("product-grid").style.display = "none";
+        document.getElementById("add-product-form").style.display = "none";
+        document.getElementById("outdated-products").style.display = "none";
+        document.getElementById("shopping-list").style.display = "block";
+        updateShoppingList();
+      }
+
+      function generatePDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(20);
+        doc.text("Liste de courses", 20, 20);
+        doc.setFontSize(12);
+        let y = 40;
+        shoppingList.forEach((item) => {
+          doc.text(
+            `${item.quantity}x ${
+              item.product.name
+            } - ${item.product.price.toFixed(2)} € (${item.product.store}, ${
+              item.product.category
+            })`,
+            20,
+            y
+          );
+          y += 10;
+        });
+
+        const summary = document.getElementById("shopping-summary");
+        doc.setFontSize(16);
+        doc.text(summary.innerText, 20, y + 20);
+
+        doc.save("liste_courses.pdf");
+      }
+
+      function showAddProductForm() {
+        document.getElementById("product-grid").style.display = "none";
+        document.getElementById("shopping-list").style.display = "none";
+        document.getElementById("outdated-products").style.display = "none";
+        document.getElementById("add-product-form").style.display = "block";
+      }
+
+      function addProduct() {
+        const name = document.getElementById("product-name").value;
+        const price = parseFloat(
+          document.getElementById("product-price").value
+        );
+        const image = document.getElementById("product-image").value;
+        const store = document.getElementById("product-store").value;
+        const category = document.getElementById("product-category").value;
+
+        if (name && !isNaN(price) && image && store && category) {
+          const newProduct = {
+            name,
+            price,
+            image,
+            store,
+            category,
+            lastUpdated: new Date(),
+          };
+          products.push(newProduct);
+          newProducts.push(newProduct);
+          alert("Produit ajouté avec succès!");
+          showProducts();
+        } else {
+          alert("Veuillez remplir tous les champs correctement.");
+        }
+      }
+
+      function exportNewProducts() {
+        const productData = JSON.stringify(newProducts, null, 2);
+        const blob = new Blob([productData], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "new_products.json";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+
+      function showOutdatedProducts() {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+
+  const outdatedProducts = products.filter(
+    (product) => product.lastUpdated < oneMonthAgo
+  );
+
+  // Trier les produits du plus ancien au plus récent
+  outdatedProducts.sort((a, b) => a.lastUpdated - b.lastUpdated);
+
+  const outdatedList = document.getElementById("outdated-products-list");
+  outdatedList.innerHTML = "";
+  outdatedProducts.forEach((product) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${product.price.toFixed(2)} €</strong> - ${
+      product.name
+    } - ${
+      product.store
+    } - Dernière mise à jour : ${product.lastUpdated.toLocaleDateString()}`;
+    outdatedList.appendChild(li);
+  });
+
+  document.getElementById("product-grid").style.display = "none";
+  document.getElementById("shopping-list").style.display = "none";
+  document.getElementById("add-product-form").style.display = "none";
+  document.getElementById("outdated-products").style.display = "block";
+}
+
+
+      function generateOutdatedPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.setFontSize(20);
+        doc.text("Produits à vérifier (plus d'un mois)", 20, 20);
+        doc.setFontSize(12);
+        let y = 40;
+        const oneMonthAgo = new Date();
+        oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+        const outdatedProducts = products.filter(
+          (product) => product.lastUpdated < oneMonthAgo
+        );
+        outdatedProducts.forEach((product) => {
+          doc.text(
+            `${product.price.toFixed(2)} € - ${product.name}
+             ${product.category} - ${product.store} - Dernière mise à jour : ${product.lastUpdated.toLocaleDateString()}`,
+            20,
+            y
+          );
+          y += 10;
+        });
+        doc.save("produits_a_verifier.pdf");
+      }
+
+      function showStats() {
+        updatePriceChart();
+        document.getElementById("chart-container").style.display = "block";
+      }
+
+      function updatePriceChart() {
+        const ctx = document.getElementById("priceChart").getContext("2d");
+        const chartData = {
+          labels: shoppingList.map(
+            (item) =>
+              item.product.name.substring(0, 15) +
+              (item.product.name.length > 15 ? "..." : "")
+          ),
+          datasets: [
+            {
+              label: "Prix des produits",
+              data: shoppingList.map(
+                (item) => item.product.price * item.quantity
+              ),
+              backgroundColor: shoppingList.map(
+                (item) => storeColors[item.product.store] || "#000000"
+              ),
+              borderColor: "rgba(200, 200, 200, 0.75)",
+              borderWidth: 1,
+            },
+          ],
+        };
+
+        if (window.myChart) {
+          window.myChart.destroy();
+        }
+
+        window.myChart = new Chart(ctx, {
+          type: "bar",
+          data: chartData,
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: {
+                  display: true,
+                  text: "Prix total (€)",
+                },
+              },
+            },
+            plugins: {
+              legend: {
+                display: false,
+              },
+              title: {
+                display: true,
+                text: "Prix total par produit dans la liste de courses",
+              },
+              tooltip: {
+                callbacks: {
+                  label: function (context) {
+                    const item = shoppingList[context.dataIndex];
+                    return `${item.product.name}: ${(
+                      item.product.price * item.quantity
+                    ).toFixed(2)} € (${
+                      item.quantity
+                    } x ${item.product.price.toFixed(2)} €)`;
+                  },
+                },
+              },
+            },
+          },
+        });
+      }
+
+      function toggleMobileMenu() {
+        const mobileMenuContent = document.querySelector(
+          ".mobile-menu-content"
+        );
+        mobileMenuContent.classList.toggle("active");
+      }
+
+      // Initialiser l'affichage des produits
+      showProducts();
+      updatePriceChart();
+    </script>
+  </body>
+</html>
